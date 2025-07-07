@@ -7,6 +7,7 @@ export const SendMoney = () => {
     const id = searchParams.get("id");
     const name = searchParams.get("name");
     const [amount, setAmount] = useState(0);
+    const [showAlert, setShowAlert] = useState(false);
 
     return <div class="flex justify-center h-screen bg-gray-100">
         <div className="h-full flex flex-col justify-center">
@@ -42,17 +43,26 @@ export const SendMoney = () => {
                     />
                     </div>
                     <button onClick={() => {
-                        axios.post("http://localhost:3000/api/v1/account/transfer", {
-                            to: id,
-                            amount
-                        }, {
-                            headers: {
-                                Authorization: "Bearer " + localStorage.getItem("token")
-                            }
-                        })
-                    }} class="justify-center rounded-md text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-2 w-full bg-green-500 text-white">
-                        Initiate Transfer
-                    </button>
+                            axios.post("http://localhost:3000/api/v1/account/transfer", {
+                                to: id,
+                                amount
+                            }, {
+                                headers: {
+                                    Authorization: "Bearer " + localStorage.getItem("token")
+                                }
+                            }).then(() => {
+                                setShowAlert(true); // ✅ show
+                                setTimeout(() => setShowAlert(false), 2000); // ✅ hide after 2 sec
+                            })
+                        }} class="justify-center rounded-md text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-2 w-full bg-green-500 text-white">
+                            Initiate Transfer
+                        </button>
+                        {/* ✅ 4. Alert Box */}
+                        {showAlert && (
+                            <div className="text-center bg-green-100 text-green-800 py-2 rounded mt-2">
+                                Money Sent Successfully 💸
+                            </div>
+                        )}
                 </div>
                 </div>
         </div>
