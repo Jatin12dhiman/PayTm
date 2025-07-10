@@ -71,22 +71,20 @@ router.post("/signin", async (req, res) => {
     }
 
     const user = await User.findOne({
-        username: req.body.username,
-        password: req.body.password
+        username: req.body.username
     });
 
-    if (user) {
+    if (user && user.password === req.body.password) {
         const token = jwt.sign({
             userId: user._id
         }, JWT_SECRET);
-  
+
         res.json({
             token: token
         })
         return;
     }
 
-    
     res.status(411).json({
         message: "Error while logging in"
     })

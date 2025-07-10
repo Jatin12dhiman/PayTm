@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { useState } from 'react';
 
@@ -8,6 +8,7 @@ export const SendMoney = () => {
     const name = searchParams.get("name");
     const [amount, setAmount] = useState(0);
     const [showAlert, setShowAlert] = useState(false);
+    const navigate = useNavigate();
 
     return <div class="flex justify-center h-screen bg-gray-100">
         <div className="h-full flex flex-col justify-center">
@@ -52,16 +53,23 @@ export const SendMoney = () => {
                                 }
                             }).then(() => {
                                 setShowAlert(true); // ✅ show
-                                setTimeout(() => setShowAlert(false), 2000); // ✅ hide after 2 sec
                             })
                         }} class="justify-center rounded-md text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-2 w-full bg-green-500 text-white">
                             Initiate Transfer
                         </button>
                         {/* ✅ 4. Alert Box */}
                         {showAlert && (
+                          <>
                             <div className="text-center bg-green-100 text-green-800 py-2 rounded mt-2">
-                                Money Sent Successfully 💸
+                              Money Sent Successfully 💸
                             </div>
+                            <button
+                              className="mt-2 w-full bg-blue-600 text-white rounded py-2 font-semibold hover:bg-blue-700 transition"
+                              onClick={() => navigate("/dashboard")}
+                            >
+                              Go to Dashboard
+                            </button>
+                          </>
                         )}
                 </div>
                 </div>

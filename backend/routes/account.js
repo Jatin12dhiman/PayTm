@@ -8,8 +8,12 @@ const router = express.Router();
 
 router.get("/balance", authMiddleware, async (req, res) => {
     const account = await Account.findOne({
-        userId: req.userId
+        userId:new mongoose.Types.ObjectId(req.userId)
     });
+
+    if (!account) {
+        return res.status(404).json({ message: "Account not found" });
+    }
 
     res.json({
         balance: account.balance
