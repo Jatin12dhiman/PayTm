@@ -74,6 +74,8 @@ router.post("/signin", async (req, res) => {
         username: req.body.username
     });
 
+    console.log("DB password:", user && user.password, "Input password:", req.body.password);
+
     if (user && user.password === req.body.password) {
         const token = jwt.sign({
             userId: user._id

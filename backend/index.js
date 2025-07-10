@@ -1,9 +1,19 @@
 const express = require("express");
-const cors = require("cors")
-
+const cors = require("cors");
 const app = express();
 
-app.use(cors());
+// DEBUG: CORS applied
+console.log("CORS middleware applied");
+
+app.use(cors({
+  origin: [
+    "https://pay-tm-theta.vercel.app",
+    "http://localhost:5173"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+}));
+
 app.use(express.json());
 
 const mainRouter = require("./routes/index");
