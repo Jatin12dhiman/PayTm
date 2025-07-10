@@ -2,7 +2,19 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-mongoose.connect(process.env.MONGODB_URI)
+// Ensure dbname is set in URI
+let uri = process.env.MONGODB_URI;
+if (uri && !uri.includes('paytm')) {
+  if (uri.endsWith('/')) {
+    uri += 'paytm?retryWrites=true&w=majority&appName=Cluster0';
+  } else if (uri.includes('?')) {
+    uri = uri.replace('?', '/paytm?');
+  } else {
+    uri += '/paytm?retryWrites=true&w=majority&appName=Cluster0';
+  }
+}
+
+mongoose.connect(uri);
 
 // Create a Schema for Users
 const userSchema = new mongoose.Schema({
