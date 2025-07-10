@@ -15,7 +15,7 @@ export const Dashboard = () => {
             navigate("/signin");
             return;
         }
-        axios.get("http://localhost:3000/api/v1/account/balance", {
+        axios.get("https://paytm-s016.onrender.com/api/v1/account/balance", {
             headers: {
                 Authorization: "Bearer " + token
             }
