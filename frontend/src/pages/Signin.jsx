@@ -11,10 +11,12 @@ export const Signin = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async () => {
         setError("");
+        setLoading(true);
         try {
             const response = await axios.post("https://paytm-s016.onrender.com/api/v1/user/signin", {
                 username,
@@ -24,6 +26,7 @@ export const Signin = () => {
             navigate("/dashboard");
         } catch (err) {
             setError("Invalid email or password");
+            setLoading(false);
         }
     };
 
@@ -32,11 +35,11 @@ export const Signin = () => {
             <div className="rounded-lg bg-white w-80 text-center p-2 h-max px-4">
                 <Heading label={"Sign in"} />
                 <SubHeading label={"Enter your credentials to access your account"} />
-                <InputBox onChange={e => setUsername(e.target.value)} placeholder="john@gmail.com" label={"Email"} />
-                <InputBox onChange={e => setPassword(e.target.value)} placeholder="123456" label={"Password"} />
+                <InputBox onChange={e => setUsername(e.target.value)} placeholder="john@gmail.com" label={"Email"} disabled={loading} />
+                <InputBox onChange={e => setPassword(e.target.value)} placeholder="123456" label={"Password"} disabled={loading} />
                 {error && <div className="text-red-500 text-sm py-1">{error}</div>}
                 <div className="pt-4">
-                    <Button label={"Sign in"} onClick={handleLogin} />
+                    <Button label={loading ? "Processing..." : "Sign in"} onClick={handleLogin} disabled={loading} />
                 </div>
                 <BottomWarning label={"Don't have an account?"} buttonText={"Sign up"} to={"/signup"} />
             </div>

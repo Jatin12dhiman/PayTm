@@ -12,6 +12,8 @@ export const Signup = () => {
     const [lastName, setLastName] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
     return <div className="bg-slate-300 h-screen flex justify-center">
@@ -21,27 +23,35 @@ export const Signup = () => {
         <SubHeading label={"Enter your infromation to create an account"} />
         <InputBox onChange={e => {
           setFirstName(e.target.value);
-        }} placeholder="John" label={"First Name"} />
+        }} placeholder="John" label={"First Name"} disabled={loading} />
         <InputBox onChange={(e) => {
           setLastName(e.target.value);
-        }} placeholder="Doe" label={"Last Name"} />
+        }} placeholder="Doe" label={"Last Name"} disabled={loading} />
         <InputBox onChange={e => {
           setUsername(e.target.value);
-        }} placeholder="john@gmail.com" label={"Email"} />
+        }} placeholder="john@gmail.com" label={"Email"} disabled={loading} />
         <InputBox onChange={(e) => {
           setPassword(e.target.value)
-        }} placeholder="123456" label={"Password"} />
+        }} placeholder="123456" label={"Password"} disabled={loading} />
+        {error && <div className="text-red-500 text-sm py-1">{error}</div>}
         <div className="pt-4">
           <Button onClick={async () => {
-            const response = await axios.post("https://paytm-s016.onrender.com/api/v1/user/signup", {
-              username,
-              firstName,
-              lastName,
-              password
-            });
-            localStorage.setItem("token", response.data.token)
-            navigate("/dashboard")
-          }} label={"Sign up"} />
+            setError("");
+            setLoading(true);
+            try {
+              const response = await axios.post("https://paytm-s016.onrender.com/api/v1/user/signup", {
+                username,
+                firstName,
+                lastName,
+                password
+              });
+              localStorage.setItem("token", response.data.token)
+              navigate("/dashboard")
+            } catch (err) {
+              setError("Sign up failed. Please try again.");
+              setLoading(false);
+            }
+          }} label={loading ? "Processing..." : "Sign up"} disabled={loading} />
         </div>
         <BottomWarning label={"Already have an account?"} buttonText={"Sign in"} to={"/signin"} />
       </div>
